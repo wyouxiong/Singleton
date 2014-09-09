@@ -26,14 +26,33 @@ public class Singleton{
 /*线程安全的单例模式，利用java虚拟机的机制保证线程安全*/
 public class Singleton {
 
-	private Singleton(){}
-	
-	private static class SingletonHolder{
+	private Singleton() {
+		System.out.println("singleton");
+	}
+
+	private static class SingletonHolder {
 		public static final Singleton singleton = new Singleton();
 	}
 
-	public static Singleton getInstance(){
+	public static Singleton getInstance() {
 		return Singleton.SingletonHolder.singleton;
+	}
+
+	public static void main(String[] args) {
+		for (int i = 0; i < 100; i++) {
+			Thread thread = new Thread() {
+				public void run() {
+					getInstance();
+					System.out.println(getInstance().hashCode());
+				}
+			};
+
+			thread.start();
+
+			Thread.yield();
+
+		}
+
 	}
 }
 
